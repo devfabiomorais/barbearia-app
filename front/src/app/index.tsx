@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Header } from "../components/header";
-import { Body } from "../components/body";
+import { Header } from "../components/_layout/header";
+import { Body } from "./navigation-bar/home";
 
 import Constants from 'expo-constants';
 
@@ -14,12 +14,10 @@ export default function Index() {
       className="bg-gray-700"
       showsVerticalScrollIndicator={false}
     >
-      <View className="w-full px-4" style={{ marginTop: statusBarHeight + 8 }}>
-        <Header />
-      </View>
+
 
       {/* Espaçamento entre Header e Body */}
-      <View className="w-full px-4 mt-4">
+      <View className="w-full px-1 mt-4">
         <Body />
       </View>
     </ScrollView>

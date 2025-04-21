@@ -5,6 +5,8 @@ import { StyleSheet, View, Pressable, Image, ScrollView } from 'react-native';
 import { Feather, Ionicons, FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
+import { Footer } from '../components/_layout/footer';
+import { Header } from '../components/_layout/header';
 
 export default function RootLayout() {
   const [scrollY, setScrollY] = useState(0);
@@ -39,32 +41,20 @@ export default function RootLayout() {
               />
             </View>
 
+
+
             {/* Fundo cinza para cobrir o espaço mesmo sem conteúdo */}
-            <View style={{ flex: 1, backgroundColor: '#374151', minHeight: 400 }}>
+            <View style={{ flex: 1, backgroundColor: '#374151', minHeight: 550 }}>
+              <Header />
               <Slot />
             </View>
           </View>
         </ScrollView>
 
 
-        {/* Rodapé fixo */}
-        <View style={styles.footer}>
-          <Pressable>
-            <Feather name="home" size={24} color="black" />
-          </Pressable>
-          <Pressable>
-            <Feather name="compass" size={24} color="black" />
-          </Pressable>
-          <Pressable>
-            <Feather name="shopping-cart" size={24} color="black" />
-          </Pressable>
-          <Pressable>
-            <Ionicons name="notifications-outline" size={24} color="black" />
-          </Pressable>
-          <Pressable>
-            <FontAwesome name="user-o" size={24} color="black" />
-          </Pressable>
-        </View>
+
+        <Footer />
+
       </View>
     </GestureHandlerRootView>
   );

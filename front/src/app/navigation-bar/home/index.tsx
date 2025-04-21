@@ -17,7 +17,7 @@ export function Body() {
       {/* Imagem com texto sobrepondo */}
       <Pressable style={{ position: 'relative', width: '100%', height: 100, borderRadius: 8 }}>
         <Image
-          source={require('../../../assets/images/trend.jpg')}
+          source={require('@assets/images/trend.jpg')}
           style={{ width: '100%', height: '100%', borderRadius: 8 }}
         />
         <Text
@@ -108,35 +108,35 @@ export function Body() {
               icon: <FontAwesome5 name="fire" size={10} color="orange" />,
               title: 'Simples',
               price: '45.00',
-              image: require('../../../assets/images/simples.webp'),
+              image: require('@assets/images/simples.webp'),
             },
             {
               subtitle: 'Trend',
               icon: null,
               title: 'Navalhado',
               price: '55.00',
-              image: require('../../../assets/images/navalhado.jpg'),
+              image: require('@assets/images/navalhado.jpg'),
             },
             {
               subtitle: 'Popular',
               icon: null,
               title: 'El Mustache',
               price: '80.00',
-              image: require('../../../assets/images/elmustache.jpg'),
+              image: require('@assets/images/elmustache.jpg'),
             },
             {
               subtitle: 'Econômico',
               icon: null,
               title: 'Raspagem',
               price: '35.00',
-              image: require('../../../assets/images/raspado.webp'),
+              image: require('@assets/images/raspado.webp'),
             },
             {
               subtitle: 'Premium',
               icon: null,
               title: 'Paisagismo',
               price: '110.00',
-              image: require('../../../assets/images/trend.jpg'),
+              image: require('@assets/images/trend.jpg'),
             },
           ].map((item, index) => (
             <View
