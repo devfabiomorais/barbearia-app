@@ -24,25 +24,28 @@ export default function RootLayout() {
           style={{ flex: 1 }}
           onScroll={handleScroll}
           scrollEventThrottle={16}
+          contentContainerStyle={{ flexGrow: 1 }}
         >
-          <View style={styles.imageWrapper}>
-            <Image
-              source={require('../../assets/images/banner.jpg')}
-              style={styles.topImage}
-              resizeMode="cover"
-            />
-            {/* Gradiente no final da imagem */}
-            <LinearGradient
-              colors={['transparent', '#374151']} // #374151 = bg-gray-700
-              style={[styles.gradientFade, { height: fadeHeight }]}
-            />
-          </View>
+          <View>
+            <View style={styles.imageWrapper}>
+              <Image
+                source={require('../../assets/images/banner.jpg')}
+                style={styles.topImage}
+                resizeMode="cover"
+              />
+              <LinearGradient
+                colors={['transparent', '#374151']}
+                style={[styles.gradientFade, { height: fadeHeight }]}
+              />
+            </View>
 
-          {/* Conteúdo da página */}
-          <View style={styles.content}>
-            <Slot />
+            {/* Fundo cinza para cobrir o espaço mesmo sem conteúdo */}
+            <View style={{ flex: 1, backgroundColor: '#374151', minHeight: 400 }}>
+              <Slot />
+            </View>
           </View>
         </ScrollView>
+
 
         {/* Rodapé fixo */}
         <View style={styles.footer}>
@@ -68,6 +71,15 @@ export default function RootLayout() {
 }
 
 const styles = StyleSheet.create({
+  fixedGrayBackground: {
+    position: 'absolute',
+    top: 100, // mesma altura da imagem do topo
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#374151',
+    zIndex: -1,
+  },
   container: {
     flex: 1,
   },
@@ -100,3 +112,5 @@ const styles = StyleSheet.create({
     borderTopColor: '#ddd',
   },
 });
+
+

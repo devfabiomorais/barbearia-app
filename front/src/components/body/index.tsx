@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Pressable, Text, Image, ScrollView } from 'react-native';
-import { Feather, FontAwesome5 } from '@expo/vector-icons';
+import { Feather, FontAwesome5, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+
+<MaterialCommunityIcons name="mustache" size={24} color="black" />
+
 
 export function Body() {
   const [isOpenGuia, setIsOpenGuia] = useState(true);
@@ -53,11 +56,11 @@ export function Body() {
       {isOpenGuia && (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 16 }}>
           {[
-            { label: 'Corte', icon: <FontAwesome5 name="cut" size={20} color="black" /> },
-            { label: 'Barba', icon: <FontAwesome5 name="cut" size={20} color="black" /> },
-            { label: 'Combos', icon: <Feather name="user-check" size={20} color="black" /> },
-            { label: 'Alisamento', icon: <FontAwesome5 name="pump-soap" size={20} color="black" /> },
-            { label: 'Sobrancelha', icon: <FontAwesome5 name="eye" size={20} color="black" /> },
+            { label: 'Corte', icon: <Ionicons name="cut-outline" size={25} color="black" /> },
+            { label: 'Barba', icon: <MaterialCommunityIcons name="mustache" size={30} color="black" /> },
+            { label: 'Combos', icon: <Feather name="package" size={22} color="black" /> },
+            { label: 'Alisamento', icon: <MaterialCommunityIcons name="hair-dryer" size={22} color="black" /> },
+            { label: 'Sobrancelha', icon: <FontAwesome5 name="eye" size={18} color="black" /> },
           ].map((item, index) => (
             <View key={index} style={{ alignItems: 'center', marginRight: 20 }}>
               <View
@@ -102,7 +105,7 @@ export function Body() {
           {[
             {
               subtitle: 'Em alta',
-              icon: <FontAwesome5 name="fire" size={10} color="gray" />,
+              icon: <FontAwesome5 name="fire" size={10} color="orange" />,
               title: 'Simples',
               price: '45.00',
               image: require('../../../assets/images/simples.webp'),
@@ -115,7 +118,7 @@ export function Body() {
               image: require('../../../assets/images/navalhado.jpg'),
             },
             {
-              subtitle: 'Novidade',
+              subtitle: 'Popular',
               icon: null,
               title: 'El Mustache',
               price: '80.00',
@@ -131,17 +134,24 @@ export function Body() {
             {
               subtitle: 'Premium',
               icon: null,
-              title: 'Premium',
+              title: 'Paisagismo',
               price: '110.00',
               image: require('../../../assets/images/trend.jpg'),
             },
           ].map((item, index) => (
-            <View key={index} style={{ marginRight: 16, alignItems: 'flex-start', paddingBottom: 15 }}>
+            <View
+              key={index}
+              style={{
+                marginRight: 20,
+                alignItems: 'flex-start',
+                paddingBottom: isOpenFast ? 15 : 0,
+              }}
+            >
               <Image
                 source={item.image}
                 style={{
-                  width: 100,
-                  height: 100,
+                  width: 90,
+                  height: 90,
                   borderRadius: 8,
                   marginBottom: 4,
                 }}
@@ -150,7 +160,7 @@ export function Body() {
                 {item.icon}
                 <Text
                   style={{
-                    color: 'gray',
+                    color: '#A0A0A0',
                     fontSize: 10,
                     marginLeft: item.icon ? 4 : 0,
                     textAlign: 'left',
@@ -159,10 +169,10 @@ export function Body() {
                   {item.subtitle}
                 </Text>
               </View>
-              <Text style={{ color: 'white', fontSize: 12, marginTop: 2, textAlign: 'left' }}>
+              <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold', marginTop: 2, textAlign: 'left' }}>
                 {item.title}
               </Text>
-              <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold', textAlign: 'left' }}>
+              <Text style={{ color: 'white', fontSize: 12, textAlign: 'left' }}>
                 {item.price}
               </Text>
             </View>
