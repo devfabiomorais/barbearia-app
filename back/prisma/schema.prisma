@@ -4,6 +4,9 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// L2DC
+// Look to the Cross
+
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -14,3 +17,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Enterprise {
+  id                     Int                      @id @default(autoincrement())
+  name                   String
+  document               String
+  email                  String
+  phone                  String                   @unique
+  url                    String                   @unique
+  logo                   Bytes?
+  banner                 Bytes?
+  addressId              Int                      @map("address_id")
+  address                Address                  @relation(fields: [addressId], references: [id])
+  EnterpriseOpeningHours EnterpriseOpeningHours[]
+
+  @@map("enterprise")
+}
+
+model Address {
+  id         Int          @id @default(autoincrement())
+  zipCode    String       @map("zip_code")
+  street     String
+  number     Int
+  complement String
+  district   String
+  city       String
+  country    String
+  Enterprise Enterprise[]
+
+  @@map("address")
+}
+
+model EnterpriseOpeningHours {
+  id           Int        @id @default(autoincrement())
+  hourStart    String     @map("hour_start")
+  hourEnd      String     @map("hour_end")
+  active       Boolean
+  weekDayId    Int        @map("week_day_id")
+  weekDay      WeekDays   @relation(fields: [weekDayId], references: [id])
+  enterpriseId Int        @map("enterprise_id")
+  enterprise   Enterprise @relation(fields: [enterpriseId], references: [id])
+
+  @@index([id])
+  @@index([weekDayId])
+  @@index([enterpriseId])
+  @@index([enterpriseId, weekDayId])
+  @@map("enterprise_opening_hours")
+}
+
+model WeekDays {
+  id           Int                      @id @default(autoincrement())
+  description  String                   @unique()
+  abbreviation String                   @unique()
+  OpeningHours EnterpriseOpeningHours[]
+
+  @@index([id])
+  @@map("week_days")
+}
