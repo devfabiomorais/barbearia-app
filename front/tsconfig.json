@@ -14,6 +14,24 @@
       "@components/*": [
         "src/components/*"
       ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@screens/*": [
+        "src/screens/*"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@contexts/*": [
+        "src/contexts/*"
+      ],
       "@app/*": [
         "src/app/*"
       ]
