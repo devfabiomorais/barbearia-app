@@ -1,9 +1,9 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import '@styles/global.css';
 import { Slot } from 'expo-router';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, Pressable, Image, ScrollView } from 'react-native';
 import React, { useState } from 'react';
-import { Footer } from '@components/_layout/footer';
+import { Header } from '@components/_layout/header';
 
 export default function RootLayout() {
   const [scrollY, setScrollY] = useState(0);
@@ -12,25 +12,27 @@ export default function RootLayout() {
     setScrollY(event.nativeEvent.contentOffset.y);
   };
 
-  const fadeHeight = Math.min(scrollY / 2, 100) + 10;
+  // O fade será mais agressivo conforme o scroll sobe, com um mínimo inicial de 10px
+  const fadeHeight = Math.min(scrollY / 2, 100) + 10; // 10px no início para o fade leve
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={{ flex: 1 }}>
+        {/* Imagem fixa no topo com o fade */}
         <ScrollView
           style={{ flex: 1 }}
           onScroll={handleScroll}
           scrollEventThrottle={16}
           contentContainerStyle={{ flexGrow: 1 }}
         >
-          <View>
-            {/* Fundo cinza para cobrir o espaço mesmo sem conteúdo */}
-            <View style={{ flex: 1, backgroundColor: '#374151', minHeight: 550 }}>
-              <Slot />
-            </View>
+          {/* Fundo cinza para cobrir o espaço mesmo sem conteúdo */}
+          <View style={{ flex: 1, backgroundColor: '#374151', minHeight: 550 }}>
+            <Header />
+            <Slot />
           </View>
         </ScrollView>
-        <Footer />
+
+
       </View>
     </GestureHandlerRootView>
   );
@@ -78,3 +80,5 @@ const styles = StyleSheet.create({
     borderTopColor: '#ddd',
   },
 });
+
+

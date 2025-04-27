@@ -1,25 +1,21 @@
-import { Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { Header } from "../components/_layout/header";
-import { Body } from "./navigation-bar/home";
-
+import { View, ScrollView } from 'react-native';
+import Login from './login';
 import Constants from 'expo-constants';
 
 const statusBarHeight = Constants.statusBarHeight;
 
 export default function Index() {
   return (
-    <ScrollView
-      style={{ flex: 1 }}
-      className="bg-gray-700"
-      showsVerticalScrollIndicator={false}
-    >
-
-
-      {/* Espaçamento entre Header e Body */}
-      <View className="w-full px-1 mt-4">
-        <Body />
-      </View>
-    </ScrollView>
+    <View style={{ flex: 1, backgroundColor: '#374151' }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ flex: 1, paddingTop: statusBarHeight, justifyContent: 'center', alignItems: 'center' }}>
+          <Login />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
