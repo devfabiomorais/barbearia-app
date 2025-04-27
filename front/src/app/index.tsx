@@ -1,6 +1,8 @@
 import { View, ScrollView } from 'react-native';
 import Login from './login';
+import Home from './navigation-bar/home';
 import Constants from 'expo-constants';
+import Register from './register';
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -13,7 +15,7 @@ export default function Index() {
         showsVerticalScrollIndicator={false}
       >
         <View style={{ flex: 1, paddingTop: statusBarHeight, justifyContent: 'center', alignItems: 'center' }}>
-          <Login />
+          <Home />
         </View>
       </ScrollView>
     </View>

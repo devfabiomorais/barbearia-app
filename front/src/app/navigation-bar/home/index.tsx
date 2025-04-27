@@ -5,7 +5,7 @@ import { Feather, FontAwesome5, MaterialCommunityIcons, Ionicons } from '@expo/v
 <MaterialCommunityIcons name="mustache" size={24} color="black" />
 
 
-export function Body() {
+export default function Home() {
   const [isOpenGuia, setIsOpenGuia] = useState(true);
   const [isOpenFast, setIsOpenFast] = useState(true);
 

@@ -1,11 +1,13 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import '@styles/global.css';
 import { Slot } from 'expo-router';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { Footer } from '@components/_layout/footer';
+import { usePathname } from 'expo-router'; // Use usePathname para verificar a rota atual
 
 export default function RootLayout() {
+  const pathname = usePathname();
+
   const [scrollY, setScrollY] = useState(0);
 
   const handleScroll = (event: any) => {
@@ -30,22 +32,14 @@ export default function RootLayout() {
             </View>
           </View>
         </ScrollView>
-        <Footer />
+        {/* Exibe o Footer apenas se a rota não for '/register' */}
+        {pathname !== '/register' && <Footer />}
       </View>
     </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
-  fixedGrayBackground: {
-    position: 'absolute',
-    top: 100, // mesma altura da imagem do topo
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: '#374151',
-    zIndex: -1,
-  },
   container: {
     flex: 1,
   },
