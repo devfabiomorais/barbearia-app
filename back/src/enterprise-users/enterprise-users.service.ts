@@ -4,11 +4,16 @@ import { UpdateEnterpriseUserDto } from './dto/update-enterprise-user.dto';
 import { EnterpriseUserLoginDto } from './dto/login-enterprise-user.dto';
 import { EnterpriseUsersRepository } from './repositories/enterprise-users.repository';
 import { UnauthorizedError } from 'src/common/errors/types/UnauthorizedError';
-import { EnterpriseUserEntity } from './entities/enterprise-user.entity';
+import {
+  EnterpriseUserEntity,
+  ResponseEnterpriseUserEntity,
+} from './entities/enterprise-user.entity';
 import * as bcrypt from 'bcryptjs';
 import { EnterpriseAuthService } from 'src/auth/enterprise-auth.service';
 import { NotFoundError } from 'src/common/errors/types/NotFoundError';
 import { ConflictError } from 'src/common/errors/types/ConflictError';
+import { Functionality } from '@prisma/client';
+import { EnterpriseLoginResponse } from 'src/@types/enterprise-login-response';
 
 @Injectable()
 export class EnterpriseUsersService {
@@ -31,18 +36,21 @@ export class EnterpriseUsersService {
     if (!match) {
       throw new UnauthorizedError('Credenciais Inválidas');
     }
-    const jwtToken = await this.enterpriseAuthService.createAccessToken(user);
+
+    const jwtToken = await this.enterpriseAuthService.createAccessToken({
+      userId: user.id,
+      enterpriseId: user.enterpriseId,
+    });
 
     await this.enterpriseUsersRepository.updateUserLastLogin(user.id);
+
+    const { PermissionGroups, Functionalities } = this.transformUser(user);
     return {
       id: user.id,
       name: user.name,
       email: user.email,
-      permissionGroups:
-        user.EnterpriseUserPermissions?.map((item) => ({
-          id: item.PermissionGroup.id,
-          description: item.PermissionGroup.description,
-        })) || [],
+      PermissionGroups,
+      Functionalities,
       jwtToken: jwtToken,
     };
   }
@@ -113,8 +121,9 @@ export class EnterpriseUsersService {
     return this.enterpriseUsersRepository.updateUser(id, updateUserDto);
   }
 
-  findAll() {
-    return this.enterpriseUsersRepository.getAllUsers();
+  async findAll(): Promise<ResponseEnterpriseUserEntity[]> {
+    const allUsers = await this.enterpriseUsersRepository.getAllUsers();
+    return allUsers.map((user) => this.transformUser(user));
   }
 
   async findOne(id: number) {
@@ -123,7 +132,13 @@ export class EnterpriseUsersService {
       throw new NotFoundError('Usuário não encontrado');
     }
 
-    return user;
+    const userDetails = this.transformUser(user);
+
+    return {
+      ...userDetails,
+      profileLogo: user.profileLogo?.toBase64(),
+      password: undefined,
+    };
   }
 
   private async checkPassword(
@@ -137,8 +152,57 @@ export class EnterpriseUsersService {
     return match;
   }
 
-  hashPassword(pass: string) {
-    const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS);
+  private hashPassword(pass: string) {
+    const saltRounds = 10;
     return bcrypt.hash(pass, saltRounds);
+  }
+
+  private transformUser(
+    user: EnterpriseUserEntity,
+  ): ResponseEnterpriseUserEntity {
+    const permissionGroups = this.extractPermissionGroups(user);
+    const functionalities = this.extractUniqueFunctionalities(user);
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      document: user.document,
+      phone: user.phone,
+      active: user.active,
+      lastLogin: user.lastLogin,
+      addressId: user.addressId,
+      Address: user.Address,
+      PermissionGroups: permissionGroups,
+      Functionalities: functionalities,
+    };
+  }
+
+  private extractPermissionGroups(
+    user: EnterpriseUserEntity,
+  ): { id: number; description: string }[] {
+    return (
+      user.EnterpriseUserPermissions?.map(({ PermissionGroup }) => ({
+        id: PermissionGroup.id,
+        description: PermissionGroup.description,
+      })) || []
+    );
+  }
+
+  private extractUniqueFunctionalities(
+    user: EnterpriseUserEntity,
+  ): Partial<Functionality>[] {
+    const functionalitiesMap = new Map<number, Partial<Functionality>>();
+
+    user.EnterpriseUserPermissions?.forEach(({ PermissionGroup }) => {
+      PermissionGroup.PermissionGroupFunctionality?.forEach(
+        ({ Functionality }) => {
+          const { id, description, moduleId } = Functionality;
+          functionalitiesMap.set(id, { id, description, moduleId });
+        },
+      );
+    });
+
+    return Array.from(functionalitiesMap.values());
   }
 }

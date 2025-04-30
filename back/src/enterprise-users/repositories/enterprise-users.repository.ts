@@ -10,10 +10,43 @@ export class EnterpriseUsersRepository {
 
   getAllUsers(): Promise<EnterpriseUserEntity[]> {
     return this.prisma.enterpriseUsers.findMany({
-      include: {
-        EnterpriseUserPermissions: {
-          include: {
-            PermissionGroup: true,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        password: true,
+        document: true,
+        phone: true,
+        active: true,
+        lastLogin: true,
+        addressId: true,
+        enterpriseId: true,
+        Address: true,
+        EnterpriseUserPermissionGroups: {
+          select: {
+            id: true,
+            permissionGroupID: true,
+            enterpriseUserId: true,
+            EnterpriseUsers: true,
+            PermissionGroup: {
+              select: {
+                id: true,
+                description: true,
+                active: true,
+                PermissionGroupsFunctionalities: {
+                  select: {
+                    id: true,
+                    functionalityId: true,
+                    Functionality: true,
+                  },
+                },
+              },
+            },
+          },
+          where: {
+            PermissionGroup: {
+              active: true,
+            },
           },
         },
       },
@@ -23,10 +56,45 @@ export class EnterpriseUsersRepository {
   findUserById(id: number): Promise<EnterpriseUserEntity | null> {
     return this.prisma.enterpriseUsers.findUnique({
       where: { id },
-      include: {
-        EnterpriseUserPermissions: {
-          include: {
-            PermissionGroup: true,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        password: true,
+        document: true,
+        phone: true,
+        active: true,
+        lastLogin: true,
+        addressId: true,
+        enterpriseId: true,
+        profileLogo: true,
+        Address: true,
+        EnterpriseUserPermissionGroups: {
+          select: {
+            id: true,
+            permissionGroupID: true,
+            enterpriseUserId: true,
+            EnterpriseUsers: true,
+            PermissionGroup: {
+              select: {
+                id: true,
+                description: true,
+                active: true,
+                EnterpriseUserPermissionGroups: true,
+                PermissionGroupsFunctionalities: {
+                  select: {
+                    id: true,
+                    functionalityId: true,
+                    Functionality: true,
+                  },
+                },
+              },
+            },
+          },
+          where: {
+            PermissionGroup: {
+              active: true,
+            },
           },
         },
       },
@@ -36,10 +104,43 @@ export class EnterpriseUsersRepository {
   findUserByEmail(email: string): Promise<EnterpriseUserEntity | null> {
     return this.prisma.enterpriseUsers.findUnique({
       where: { email },
-      include: {
-        EnterpriseUserPermissions: {
-          include: {
-            PermissionGroup: true,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        password: true,
+        document: true,
+        phone: true,
+        active: true,
+        lastLogin: true,
+        addressId: true,
+        enterpriseId: true,
+        Address: true,
+        EnterpriseUserPermissionGroups: {
+          select: {
+            id: true,
+            permissionGroupID: true,
+            enterpriseUserId: true,
+            EnterpriseUsers: true,
+            PermissionGroup: {
+              select: {
+                id: true,
+                description: true,
+                active: true,
+                PermissionGroupsFunctionalities: {
+                  select: {
+                    id: true,
+                    functionalityId: true,
+                    Functionality: true,
+                  },
+                },
+              },
+            },
+          },
+          where: {
+            PermissionGroup: {
+              active: true,
+            },
           },
         },
       },
@@ -60,6 +161,13 @@ export class EnterpriseUsersRepository {
         ...createEnterpriseUserDto,
         active: true,
         enterpriseId,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        document: true,
+        phone: true,
       },
     });
   }

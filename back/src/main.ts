@@ -13,6 +13,24 @@ import {
   ForbiddenInterceptor,
 } from './common/errors/interceptors/forbidden.interceptor';
 
+declare global {
+  interface Uint8Array {
+    toBase64(): string;
+  }
+
+  interface String {
+    toBase64(): null;
+  }
+}
+
+Uint8Array.prototype.toBase64 = function () {
+  return Buffer.from(this).toString('base64');
+};
+
+String.prototype.toBase64 = function () {
+  return null;
+};
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // Libera CORS para todas as origens (ou especifique a URL se quiser)
