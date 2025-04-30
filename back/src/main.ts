@@ -15,16 +15,12 @@ import {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-<<<<<<< HEAD
-
   // Libera CORS para todas as origens (ou especifique a URL se quiser)
   app.enableCors({
     origin: '*', // ou coloque sua URL como: 'http://localhost:19006' para o Expo Web
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
   });
-=======
-  app.enableCors();
 
   app.useGlobalFilters(new ForbiddenExceptionFilter());
   app.useGlobalInterceptors(new ForbiddenInterceptor());
@@ -49,7 +45,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
->>>>>>> e9dcb178e33cf931d79f2945de0b267973bde498
 
   await app.listen(process.env.PORT ?? 3000);
 }
