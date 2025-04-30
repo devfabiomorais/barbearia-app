@@ -3,24 +3,18 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import ms from 'ms';
 import { Request } from 'express';
 import { sign, verify } from 'jsonwebtoken';
-import { EnterpriseJwtPayload } from './interfaces/jwt-payload.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { EnterpriseUserEntity } from 'src/enterprise-users/entities/enterprise-user.entity';
-import ms from 'ms';
+import { EnterpriseJwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class EnterpriseAuthService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async createAccessToken(userData: EnterpriseUserEntity) {
-    const jwtUserData: EnterpriseJwtPayload = {
-      userId: userData.id,
-      enterpriseId: userData.enterpriseId,
-      EnterpriseUserPermissions: userData.EnterpriseUserPermissions || [],
-    };
-    return sign(jwtUserData, String(process.env.JWT_SECRET), {
+  public async createAccessToken(userData: EnterpriseJwtPayload) {
+    return sign(userData, String(process.env.JWT_SECRET), {
       expiresIn: String(process.env.JWT_EXPIRATION || '7d') as ms.StringValue,
     });
   }
@@ -38,7 +32,7 @@ export class EnterpriseAuthService {
       throw new UnauthorizedException('Usuário não encontrado.');
     }
     const userPermissions =
-      await this.prisma.enterpriseUserPermissions.findMany({
+      await this.prisma.enterpriseUsersPermissionGroups.findMany({
         where: {
           enterpriseUserId: jwtPayload?.userId,
         },
@@ -51,7 +45,7 @@ export class EnterpriseAuthService {
 
     const functionalities = await this.prisma.functionality.findMany({
       where: {
-        AssocPermissionGroupsFunctionality: {
+        PermissionGroupsFunctionalities: {
           some: {
             permissionGroupId: {
               in: permissionGroupIds,
@@ -84,6 +78,7 @@ export class EnterpriseAuthService {
         token,
         String(process.env.JWT_SECRET),
       ) as EnterpriseJwtPayload;
+      console.log(decoded);
       return decoded.userId;
     } catch (error) {
       console.log(error);

@@ -1,7 +1,7 @@
 import {
-  AssocPermissionGroupsFunctionality,
+  PermissionGroupFunctionality,
   Enterprise,
-  EnterpriseUserPermissions,
+  EnterpriseUsersPermissionGroups,
   EnterpriseUsers,
   PrismaClient,
 } from '@prisma/client';
@@ -65,15 +65,15 @@ async function createEnterpriseUser() {
 }
 
 async function createEnterpriseUserPermissions() {
-  const usersPermission: EnterpriseUserPermissions[] = [
+  const enterpriseUsersPermissionGroups: EnterpriseUsersPermissionGroups[] = [
     {
       id: 1,
       permissionGroupID: 1, // Administrador
       enterpriseUserId: 1,
     },
   ];
-  const result = await prisma.enterpriseUserPermissions.createMany({
-    data: usersPermission,
+  const result = await prisma.enterpriseUsersPermissionGroups.createMany({
+    data: enterpriseUsersPermissionGroups,
     skipDuplicates: true,
   });
 
@@ -83,18 +83,17 @@ async function createEnterpriseUserPermissions() {
   }
 }
 
-async function createAssocPermissionGroupsFunctionality() {
-  const assocPermissionGroupsFunctionality: AssocPermissionGroupsFunctionality[] =
-    [
-      {
-        id: 1,
-        enterpriseId: 1,
-        permissionGroupId: 1,
-        functionalityId: 1,
-      },
-    ];
-  const result = await prisma.assocPermissionGroupsFunctionality.createMany({
-    data: assocPermissionGroupsFunctionality,
+async function createPermissionGroupsFunctionalities() {
+  const permissionGroupFunctionality: PermissionGroupFunctionality[] = [
+    {
+      id: 1,
+      enterpriseId: 1,
+      permissionGroupId: 1,
+      functionalityId: 1,
+    },
+  ];
+  const result = await prisma.permissionGroupFunctionality.createMany({
+    data: permissionGroupFunctionality,
     skipDuplicates: true,
   });
   if (result.count) {
@@ -108,7 +107,7 @@ async function main() {
   await createEnterprise();
   await createEnterpriseUser();
   await createEnterpriseUserPermissions();
-  await createAssocPermissionGroupsFunctionality();
+  await createPermissionGroupsFunctionalities();
   const message = 'Seed de teste executado com sucesso!';
   console.log(`\x1b[33m${message}\x1b[0m`);
 }

@@ -12,10 +12,14 @@ import { EnterpriseUsersService } from './enterprise-users.service';
 import { UpdateEnterpriseUserDto } from './dto/update-enterprise-user.dto';
 import { EnterpriseUserLoginDto } from './dto/login-enterprise-user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { EnterpriseUserEntity } from './entities/enterprise-user.entity';
+import {
+  EnterpriseUserEntity,
+  ResponseEnterpriseUserEntity,
+} from './entities/enterprise-user.entity';
 import { AccessControlGuard } from 'src/common/guards/access-control.guard';
 import { USER_REGISTRATION } from 'src/functionalities';
 import { CreateEnterpriseUserDto } from './dto/create-enterprise-user.dto';
+import { EnterpriseLoginResponse } from 'src/@types/enterprise-login-response';
 
 @Controller('enterprise-users')
 export class EnterpriseUsersController {
@@ -30,12 +34,18 @@ export class EnterpriseUsersController {
     return this.enterpriseUsersService.login(loginDto);
   }
 
+  @Get('details')
+  @UseGuards(AuthGuard('enterprise-jwt'))
+  userDetails(@Req() request): Promise<Partial<ResponseEnterpriseUserEntity>> {
+    return this.enterpriseUsersService.findOne(request.user.id);
+  }
+
   @Post()
   @UseGuards(AccessControlGuard(USER_REGISTRATION))
   public async create(
     @Body() createEnterpriseUserDto: CreateEnterpriseUserDto,
     @Req() request,
-  ): Promise<EnterpriseUserEntity> {
+  ): Promise<Partial<EnterpriseUserEntity>> {
     return this.enterpriseUsersService.create(
       createEnterpriseUserDto,
       request.user.enterpriseId,
@@ -43,19 +53,21 @@ export class EnterpriseUsersController {
   }
 
   @Get()
-  @UseGuards(AuthGuard('jwt'))
-  findAll(): Promise<EnterpriseUserEntity[]> {
+  @UseGuards(AccessControlGuard(USER_REGISTRATION))
+  findAll(): Promise<Partial<ResponseEnterpriseUserEntity>[]> {
     return this.enterpriseUsersService.findAll();
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'))
-  findOne(@Param('id') id: string): Promise<EnterpriseUserEntity> {
+  @UseGuards(AccessControlGuard(USER_REGISTRATION))
+  async findOne(
+    @Param('id') id: string,
+  ): Promise<Partial<ResponseEnterpriseUserEntity>> {
     return this.enterpriseUsersService.findOne(+id);
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AccessControlGuard(USER_REGISTRATION))
   update(
     @Param('id') id: string,
     @Body() updateEnterpriseUserDto: UpdateEnterpriseUserDto,
