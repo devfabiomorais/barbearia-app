@@ -34,8 +34,12 @@ export class EnterpriseUsersController {
   @UseGuards(AccessControlGuard(USER_REGISTRATION))
   public async create(
     @Body() createEnterpriseUserDto: CreateEnterpriseUserDto,
+    @Req() request,
   ): Promise<EnterpriseUserEntity> {
-    return this.enterpriseUsersService.create(createEnterpriseUserDto);
+    return this.enterpriseUsersService.create(
+      createEnterpriseUserDto,
+      request.user.enterpriseId,
+    );
   }
 
   @Get()
