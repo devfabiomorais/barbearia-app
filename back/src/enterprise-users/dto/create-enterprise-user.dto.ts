@@ -61,14 +61,4 @@ export class CreateEnterpriseUserDto {
   @IsOptional()
   @IsNotEmpty()
   phone?: string;
-
-  @ApiProperty({
-    type: 'integer',
-    description: 'ID da empresa em que o usuário está relacionado.',
-    example: 1,
-    required: true,
-  })
-  @IsInt()
-  @IsNotEmpty()
-  enterpriseId: number;
 }

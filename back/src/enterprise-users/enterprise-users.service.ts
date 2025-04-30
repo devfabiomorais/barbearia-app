@@ -47,7 +47,10 @@ export class EnterpriseUsersService {
     };
   }
 
-  async create(createEnterpriseUserDto: CreateEnterpriseUserDto) {
+  async create(
+    createEnterpriseUserDto: CreateEnterpriseUserDto,
+    enterpriseId: number,
+  ) {
     const emailAlreadyInUse =
       await this.enterpriseUsersRepository.findUserByEmail(
         createEnterpriseUserDto.email,
@@ -58,10 +61,13 @@ export class EnterpriseUsersService {
       );
     }
     const password = await this.hashPassword(createEnterpriseUserDto.password);
-    return this.enterpriseUsersRepository.create({
-      ...createEnterpriseUserDto,
-      password,
-    });
+    return this.enterpriseUsersRepository.create(
+      {
+        ...createEnterpriseUserDto,
+        password,
+      },
+      enterpriseId,
+    );
   }
 
   async update(id: number, updateEnterpriseUserDto: UpdateEnterpriseUserDto) {

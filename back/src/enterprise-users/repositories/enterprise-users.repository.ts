@@ -51,11 +51,15 @@ export class EnterpriseUsersRepository {
       .$executeRaw`UPDATE "enterprise_users" SET "last_login" = NOW() WHERE id = ${id}`;
   }
 
-  create(createEnterpriseUserDto: CreateEnterpriseUserDto) {
+  create(
+    createEnterpriseUserDto: CreateEnterpriseUserDto,
+    enterpriseId: number,
+  ) {
     return this.prisma.enterpriseUsers.create({
       data: {
         ...createEnterpriseUserDto,
         active: true,
+        enterpriseId,
       },
     });
   }
