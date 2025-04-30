@@ -48,6 +48,7 @@ export class CreateEnterpriseUserDto {
   })
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   document?: string;
 
   @ApiProperty({
