@@ -6,7 +6,7 @@ export function Footer() {
   const router = useRouter();
 
   return (
-    <View className="flex-row justify-around items-center h-[60px] bg-white border-t border-t-[#ddd]">
+    <View className="flex-row justify-around items-center h-[40px] bg-white border-t border-t-[#ddd]">
       <Pressable className="navigation-bar-button" onPress={() => router.push('/navigation-bar/home')}>
         <Feather name="home" size={24} color="black" />
       </Pressable>

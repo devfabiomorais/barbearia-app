@@ -20,10 +20,11 @@ export default function RootLayout() {
     <GestureHandlerRootView style={styles.container}>
       <View style={{ flex: 1 }}>
         <ScrollView
-          style={{ flex: 1 }}
+          style={{ flex: 1, backgroundColor: '#374151' }}
           onScroll={handleScroll}
           scrollEventThrottle={16}
           contentContainerStyle={{ flexGrow: 1 }}
+
         >
           <View>
             {/* Fundo cinza para cobrir o espaço mesmo sem conteúdo */}
@@ -32,8 +33,8 @@ export default function RootLayout() {
             </View>
           </View>
         </ScrollView>
-        {/* Exibe o Footer apenas se a rota não for '/register' */}
-        {pathname !== '/register' && <Footer />}
+        <Footer />
+        {/* {pathname !== '/register' && <Footer />} */}
       </View>
     </GestureHandlerRootView>
   );

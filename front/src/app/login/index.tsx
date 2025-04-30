@@ -14,7 +14,7 @@ export default function Login() {
       >
         <View>
           <Text className="text-white font-bold text-2xl mb-8">
-            Seja muito bem-vindo!
+            Bem-vindo(a) de volta!
           </Text>
 
           <TextInput
