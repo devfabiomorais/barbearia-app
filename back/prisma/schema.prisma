@@ -26,6 +26,7 @@ model User {
 }
 
 model Enterprise {
+<<<<<<< HEAD
   id                     Int                      @id @default(autoincrement())
   name                   String
   bio                    String
@@ -38,21 +39,38 @@ model Enterprise {
   addressId              Int?                     @map("address_id")
   address                Address?                 @relation(fields: [addressId], references: [id])
   EnterpriseOpeningHours EnterpriseOpeningHours[]
+=======
+  id                                 Int                                  @id @default(autoincrement())
+  name                               String
+  bio                                String
+  document                           String
+  email                              String
+  phone                              String                               @unique
+  url                                String                               @unique
+  logo                               Bytes?
+  banner                             Bytes?
+  addressId                          Int?                                 @map("address_id")
+  address                            Address?                             @relation(fields: [addressId], references: [id])
+  EnterpriseOpeningHours             EnterpriseOpeningHours[]
+  EnterpriseUser                     EnterpriseUsers[]
+  AssocPermissionGroupsFunctionality AssocPermissionGroupsFunctionality[]
+>>>>>>> e9dcb178e33cf931d79f2945de0b267973bde498
 
   @@map("enterprise")
 }
 
 model Address {
-  id         Int          @id @default(autoincrement())
-  zipCode    String       @map("zip_code")
-  street     String
-  number     Int
-  complement String?
-  district   String
-  city       String
-  state      String
-  country    String
-  Enterprise Enterprise[]
+  id             Int               @id @default(autoincrement())
+  zipCode        String            @map("zip_code")
+  street         String
+  number         Int
+  complement     String?
+  district       String
+  city           String
+  state          String
+  country        String
+  Enterprise     Enterprise[]
+  EnterpriseUser EnterpriseUsers[]
 
   @@map("address")
 }
@@ -82,4 +100,81 @@ model WeekDays {
 
   @@index([id])
   @@map("week_days")
+}
+
+model EnterpriseUsers {
+  id                        Int                         @id @default(autoincrement())
+  name                      String
+  email                     String                      @unique
+  password                  String
+  document                  String?
+  phone                     String?
+  active                    Boolean
+  lastLogin                 DateTime?                   @map("last_login")
+  profileLogo               Bytes?                      @map("profile_logo")
+  addressId                 Int?                        @map("address_id")
+  enterpriseId              Int                         @map("enterprise_id")
+  Enterprise                Enterprise                  @relation(fields: [enterpriseId], references: [id])
+  address                   Address?                    @relation(fields: [addressId], references: [id])
+  EnterpriseUserPermissions EnterpriseUserPermissions[]
+
+  @@index([id])
+  @@index([email])
+  @@map("enterprise_users")
+}
+
+model PermissionGroups {
+  id                                 Int                                  @id @default(autoincrement())
+  description                        String
+  active                             Boolean
+  EnterpriseUserPermissions          EnterpriseUserPermissions[]
+  AssocPermissionGroupsFunctionality AssocPermissionGroupsFunctionality[]
+
+  @@index([id])
+  @@map("user_permissions")
+}
+
+model EnterpriseUserPermissions {
+  id                Int              @id @default(autoincrement())
+  permissionGroupID Int              @map("user_permission_id")
+  PermissionGroup   PermissionGroups @relation(fields: [permissionGroupID], references: [id])
+  enterpriseUserId  Int              @map("enterprise_user_id")
+  EnterpriseUsers   EnterpriseUsers  @relation(fields: [enterpriseUserId], references: [id])
+
+  @@index([id])
+  @@index([permissionGroupID])
+  @@index([enterpriseUserId])
+  @@map("enterprise_user_permissions")
+}
+
+model Module {
+  id            Int             @id @default(autoincrement())
+  description   String
+  active        Boolean
+  Functionality Functionality[]
+
+  @@map("module")
+}
+
+model Functionality {
+  id                                 Int                                  @id @default(autoincrement())
+  description                        String
+  active                             Boolean
+  moduleId                           Int                                  @map("module_id")
+  Module                             Module                               @relation(fields: [moduleId], references: [id])
+  AssocPermissionGroupsFunctionality AssocPermissionGroupsFunctionality[]
+
+  @@map("functionality")
+}
+
+model AssocPermissionGroupsFunctionality {
+  id                Int              @id @default(autoincrement())
+  permissionGroupId Int              @map("permission_group_id")
+  PermissionGroup   PermissionGroups @relation(fields: [permissionGroupId], references: [id])
+  functionalityId   Int              @map("functionality_id")
+  Functionality     Functionality    @relation(fields: [functionalityId], references: [id])
+  enterpriseId      Int              @map("enterprise_id")
+  Enterprise        Enterprise       @relation(fields: [enterpriseId], references: [id])
+
+  @@map("assoc_permission_groups_functionality")
 }
