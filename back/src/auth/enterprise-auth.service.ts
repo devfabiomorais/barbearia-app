@@ -82,7 +82,7 @@ export class EnterpriseAuthService {
       return decoded.userId;
     } catch (error) {
       console.log(error);
-      throw new UnauthorizedException('Invalid token.');
+      throw new UnauthorizedException('Token Inválido.');
     }
   }
 

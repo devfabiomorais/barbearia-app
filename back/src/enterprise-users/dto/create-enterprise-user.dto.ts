@@ -12,7 +12,7 @@ export class CreateEnterpriseUserDto {
   @ApiProperty({
     type: 'string',
     description: 'Nome do usuário.',
-    example: 'John Due',
+    example: 'John Doe',
     required: false,
   })
   @IsString()
@@ -22,7 +22,7 @@ export class CreateEnterpriseUserDto {
   @ApiProperty({
     type: 'string',
     description: 'E-mail do usuário.',
-    example: 'john-due@email.com',
+    example: 'john-doe@email.com',
     required: false,
   })
   @IsEmail()

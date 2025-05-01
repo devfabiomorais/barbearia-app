@@ -168,13 +168,17 @@ export class EnterpriseUsersRepository {
         email: true,
         document: true,
         phone: true,
+        active: true,
+        lastLogin: true,
       },
     });
   }
 
   updateUser(
     id: number,
-    updateEnterpriseUserDto: Partial<UpdateEnterpriseUserDto>,
+    updateEnterpriseUserDto: Partial<
+      UpdateEnterpriseUserDto & { profileLogo?: Uint8Array<ArrayBufferLike> }
+    >,
   ) {
     return this.prisma.enterpriseUsers.update({
       where: { id },
