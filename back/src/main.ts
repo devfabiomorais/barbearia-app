@@ -44,9 +44,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ForbiddenInterceptor());
   app.useGlobalInterceptors(new ConflictInterceptor());
   app.useGlobalInterceptors(new BadRequestInterceptor());
-  app.useGlobalInterceptors(new DatabaseInterceptor());
   app.useGlobalInterceptors(new UnauthorizedInterceptor());
   app.useGlobalInterceptors(new NotFoundInterceptor());
+  app.useGlobalInterceptors(new DatabaseInterceptor());
   app.useGlobalInterceptors(new InternalServerErrorInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
