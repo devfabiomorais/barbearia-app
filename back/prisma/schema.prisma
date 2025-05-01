@@ -26,20 +26,6 @@ model User {
 }
 
 model Enterprise {
-<<<<<<< HEAD
-  id                     Int                      @id @default(autoincrement())
-  name                   String
-  bio                    String
-  document               String
-  email                  String                   @unique
-  phone                  String                   @unique
-  url                    String                   @unique
-  logo                   Bytes?
-  banner                 Bytes?
-  addressId              Int?                     @map("address_id")
-  address                Address?                 @relation(fields: [addressId], references: [id])
-  EnterpriseOpeningHours EnterpriseOpeningHours[]
-=======
   id                                 Int                                  @id @default(autoincrement())
   name                               String
   bio                                String
@@ -54,7 +40,6 @@ model Enterprise {
   EnterpriseOpeningHours             EnterpriseOpeningHours[]
   EnterpriseUser                     EnterpriseUsers[]
   AssocPermissionGroupsFunctionality AssocPermissionGroupsFunctionality[]
->>>>>>> e9dcb178e33cf931d79f2945de0b267973bde498
 
   @@map("enterprise")
 }

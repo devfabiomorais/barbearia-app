@@ -24,27 +24,18 @@
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
-<<<<<<< HEAD
     "@nestjs/mapped-types": "*",
-=======
     "@nestjs/jwt": "^11.0.0",
-    "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^11.0.5",
->>>>>>> e9dcb178e33cf931d79f2945de0b267973bde498
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.1.5",
     "@prisma/client": "^6.6.0",
-<<<<<<< HEAD
     "bcrypt": "^5.1.1",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1",
     "react-native-toast-message": "^2.3.0",
-=======
     "bcryptjs": "^3.0.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "passport-jwt": "^4.0.1",
->>>>>>> e9dcb178e33cf931d79f2945de0b267973bde498
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -60,10 +51,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.15.3",
-<<<<<<< HEAD
-=======
     "@types/passport-jwt": "^4.0.1",
->>>>>>> e9dcb178e33cf931d79f2945de0b267973bde498
     "@types/supertest": "^6.0.2",
     "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
@@ -78,13 +66,8 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-<<<<<<< HEAD
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.31.1"
-=======
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.20.0"
->>>>>>> e9dcb178e33cf931d79f2945de0b267973bde498
+    "typescript-eslint": "^8.31.1",
+    "typescript": "^5.8.3"
   },
   "jest": {
     "moduleFileExtensions": [

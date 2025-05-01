@@ -51,7 +51,9 @@ export default function Register() {
 
   return (
     <>
+
       <LogoHeader reloadKey={reloadKey} onPress={handlePress} />
+
 
 
       <View className="flex-1 bg-transparent pt-2 items-center justify-between">
