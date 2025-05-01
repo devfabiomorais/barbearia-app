@@ -7,6 +7,7 @@ import { UserEntity } from './entities/user.entity';
 import { UsersRepository } from './repositories/users.repository';
 import { UserAuthService } from 'src/auth/user-auth.service';
 import { ConflictError } from 'src/common/errors/types/ConflictError';
+import { LoginResponse } from './entities/login-response';
 
 @Injectable()
 export class UsersService {

@@ -15,12 +15,22 @@ import { AuthGuard } from '@nestjs/passport';
 import {
   EnterpriseUserEntity,
   ResponseEnterpriseUserEntity,
+  UpdateEnterpriseUserEntityResponse,
 } from './entities/enterprise-user.entity';
 import { AccessControlGuard } from 'src/common/guards/access-control.guard';
 import { USER_REGISTRATION } from 'src/functionalities';
 import { CreateEnterpriseUserDto } from './dto/create-enterprise-user.dto';
-import { EnterpriseLoginResponse } from 'src/@types/enterprise-login-response';
-
+import { EnterpriseLoginResponse } from 'src/enterprise-users/entities/enterprise-login-response';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  OmitType,
+} from '@nestjs/swagger';
+@ApiTags('Usuários Corporativos')
 @Controller('enterprise-users')
 export class EnterpriseUsersController {
   constructor(
@@ -28,6 +38,13 @@ export class EnterpriseUsersController {
   ) {}
 
   @Post('login')
+  @ApiOperation({ summary: 'Autenticar um usuário corporativo' })
+  @ApiResponse({
+    status: 201,
+    description:
+      'Login realizado com sucesso. Retorna o token de acesso (JWT) e os dados do usuário.',
+    type: EnterpriseLoginResponse,
+  })
   public async login(
     @Body() loginDto: EnterpriseUserLoginDto,
   ): Promise<EnterpriseLoginResponse> {
@@ -36,12 +53,33 @@ export class EnterpriseUsersController {
 
   @Get('details')
   @UseGuards(AuthGuard('enterprise-jwt'))
-  userDetails(@Req() request): Promise<Partial<ResponseEnterpriseUserEntity>> {
+  @ApiOperation({
+    summary: 'Recuperar dados do usuário corporativo autenticado',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Dados do usuário autenticado retornados com sucesso.',
+    type: ResponseEnterpriseUserEntity,
+  })
+  @ApiResponse({
+    status: 401,
+    description:
+      'Token JWT não fornecido, inválido ou expirado. Acesso não autorizado.',
+  })
+  @ApiBearerAuth('jwt')
+  async userDetails(@Req() request) {
     return this.enterpriseUsersService.findOne(request.user.id);
   }
 
   @Post()
   @UseGuards(AccessControlGuard(USER_REGISTRATION))
+  @ApiOperation({ summary: 'Cadastrar um novo usuário corporativo' })
+  @ApiResponse({
+    status: 201,
+    description: 'Usuário corporativo criado com sucesso.',
+    type: EnterpriseUserEntity,
+  })
+  @ApiBearerAuth('jwt')
   public async create(
     @Body() createEnterpriseUserDto: CreateEnterpriseUserDto,
     @Req() request,
@@ -54,12 +92,28 @@ export class EnterpriseUsersController {
 
   @Get()
   @UseGuards(AccessControlGuard(USER_REGISTRATION))
+  @ApiOperation({ summary: 'Listar todos os usuários corporativos' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de usuários corporativos obtida com sucesso.',
+    type: [OmitType(ResponseEnterpriseUserEntity, ['profileLogo'])],
+  })
+  @ApiBearerAuth('jwt')
   findAll(): Promise<Partial<ResponseEnterpriseUserEntity>[]> {
     return this.enterpriseUsersService.findAll();
   }
 
   @Get(':id')
   @UseGuards(AccessControlGuard(USER_REGISTRATION))
+  @ApiOperation({
+    summary: 'Buscar um usuário corporativo por ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Dados do usuário corporativo retornados com sucesso.',
+    type: ResponseEnterpriseUserEntity,
+  })
+  @ApiBearerAuth('jwt')
   async findOne(
     @Param('id') id: string,
   ): Promise<Partial<ResponseEnterpriseUserEntity>> {
@@ -68,6 +122,15 @@ export class EnterpriseUsersController {
 
   @Patch(':id')
   @UseGuards(AccessControlGuard(USER_REGISTRATION))
+  @ApiOperation({
+    summary: 'Atualizar informações de um usuário corporativo por ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Informações do usuário atualizadas com sucesso.',
+    type: UpdateEnterpriseUserEntityResponse,
+  })
+  @ApiBearerAuth('jwt')
   update(
     @Param('id') id: string,
     @Body() updateEnterpriseUserDto: UpdateEnterpriseUserDto,

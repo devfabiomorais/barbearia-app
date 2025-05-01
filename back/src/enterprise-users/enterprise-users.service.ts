@@ -13,7 +13,7 @@ import { EnterpriseAuthService } from 'src/auth/enterprise-auth.service';
 import { NotFoundError } from 'src/common/errors/types/NotFoundError';
 import { ConflictError } from 'src/common/errors/types/ConflictError';
 import { Functionality } from '@prisma/client';
-import { EnterpriseLoginResponse } from 'src/@types/enterprise-login-response';
+import { EnterpriseLoginResponse } from 'src/enterprise-users/entities/enterprise-login-response';
 
 @Injectable()
 export class EnterpriseUsersService {
