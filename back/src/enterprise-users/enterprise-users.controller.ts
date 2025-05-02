@@ -7,6 +7,8 @@ import {
   Param,
   UseGuards,
   Req,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { EnterpriseUsersService } from './enterprise-users.service';
 import { UpdateEnterpriseUserDto } from './dto/update-enterprise-user.dto';
@@ -30,6 +32,10 @@ import {
   ApiTags,
   OmitType,
 } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { IdParamValidatorPipe } from 'src/common/pipes/id-param-validator.pipe';
+import { FileSizeValidationPipe } from 'src/common/pipes/file-size-validation.pipe';
+
 @ApiTags('Usuários Corporativos')
 @Controller('enterprise-users')
 export class EnterpriseUsersController {
@@ -115,9 +121,43 @@ export class EnterpriseUsersController {
   })
   @ApiBearerAuth('jwt')
   async findOne(
-    @Param('id') id: string,
+    @Param('id', IdParamValidatorPipe()) id: string,
   ): Promise<Partial<ResponseEnterpriseUserEntity>> {
     return this.enterpriseUsersService.findOne(+id);
+  }
+
+  @Patch('/upload-profile-picture')
+  @UseGuards(AuthGuard('enterprise-jwt'))
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Atualiza a foto de perfil do usuário' })
+  @ApiResponse({
+    status: 200,
+    description: 'Foto de perfil atualizada com sucesso.',
+    example: {
+      message: 'Foto de perfil atualizada com sucesso.',
+    },
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Arquivo da foto de perfil',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiBearerAuth('jwt')
+  async uploadLogo(
+    @Req() req,
+    @UploadedFile(FileSizeValidationPipe()) file: Express.Multer.File,
+  ) {
+    const userId = req.user.id;
+    return this.enterpriseUsersService.uploadProfilePicture(userId, file);
   }
 
   @Patch(':id')
@@ -132,9 +172,10 @@ export class EnterpriseUsersController {
   })
   @ApiBearerAuth('jwt')
   update(
-    @Param('id') id: string,
+    @Param('id', IdParamValidatorPipe())
+    id: number,
     @Body() updateEnterpriseUserDto: UpdateEnterpriseUserDto,
   ): Promise<Partial<EnterpriseUserEntity>> {
-    return this.enterpriseUsersService.update(+id, updateEnterpriseUserDto);
+    return this.enterpriseUsersService.update(id, updateEnterpriseUserDto);
   }
 }

@@ -121,6 +121,13 @@ export class EnterpriseUsersService {
     return this.enterpriseUsersRepository.updateUser(id, updateUserDto);
   }
 
+  async uploadProfilePicture(id: number, file: Express.Multer.File) {
+    await this.enterpriseUsersRepository.updateUser(id, {
+      profileLogo: Buffer.from(file.buffer),
+    });
+    return { message: 'Foto de perfil atualizada com sucesso.' };
+  }
+
   async findAll(): Promise<ResponseEnterpriseUserEntity[]> {
     const allUsers = await this.enterpriseUsersRepository.getAllUsers();
     return allUsers.map((user) => this.transformUser(user));
