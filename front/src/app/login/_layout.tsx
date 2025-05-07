@@ -1,33 +1,22 @@
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import '@styles/global.css';
 import { Slot } from 'expo-router';
-import { StyleSheet, View, ScrollView } from 'react-native';
-import React from 'react';
-
-export const unstable_settings = {
-  initialRouteName: 'index',
-};
+import { View, Text, SafeAreaView } from 'react-native';
 
 export default function LoginLayout() {
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <View style={{ flex: 1 }}>
-        <ScrollView
-          style={{ flex: 1 }}
-          scrollEventThrottle={16}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
-          <View style={{ flex: 1, backgroundColor: '#374151', minHeight: 550 }}>
-            <Slot />
-          </View>
-        </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        {/* Conteúdo da página */}
+        <View style={{ flex: 1 }}>
+          <Slot />
+        </View>
+
+        {/* Rodapé fixo */}
+        <View className="bg-gray-700 items-center py-2">
+          <Text className="text-gray-400 text-xs">
+            © L2DC. Todos os direitos reservados.
+          </Text>
+        </View>
       </View>
-    </GestureHandlerRootView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

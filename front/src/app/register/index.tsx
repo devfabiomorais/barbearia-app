@@ -4,14 +4,10 @@ import { useState } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, Image, Alert } from 'react-native';
 
 export default function Register() {
-  const [reloadKey, setReloadKey] = useState(0);
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmSenha, setConfirmSenha] = useState('');
 
-  const handlePress = () => {
-    setReloadKey(prevKey => prevKey + 1);
-  };
 
   const handleRegister = async () => {
     if (senha !== confirmSenha) {
@@ -52,7 +48,7 @@ export default function Register() {
   return (
     <>
 
-      <LogoHeader reloadKey={reloadKey} onPress={handlePress} />
+      <LogoHeader />
 
 
 
